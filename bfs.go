@@ -1,5 +1,7 @@
 package main
 
+import "errors"
+
 // Tree is our  representation of the tree
 // A node is given as the key with its child nodes as value
 type Tree map[string][]string
@@ -22,8 +24,8 @@ func (s *Stack) Pop() string {
 }
 
 // Push adds the given node to the Stack
-func (s *Stack) Push(node string) {
-	s.nodeList = append(s.nodeList, node)
+func (s *Stack) Push(nodes ...string) {
+	s.nodeList = append(s.nodeList, nodes...)
 }
 
 // Len returns the count of nodes to be processed
@@ -37,6 +39,25 @@ func (s *Stack) Clear() {
 }
 
 // FindNode does a BFS on the
-func FindNode(tree Tree, rootNode, requiredNode string) (string, error) {
-	return "", nil
+func FindNode(tree Tree, stack *Stack, requiredNode string) (string, error) {
+
+	currentNode := stack.Pop()
+	// found what we are looking for
+	if currentNode == requiredNode {
+		return requiredNode, nil
+	}
+
+	// get the current node child nodes and add them to stack
+	nodeList, ok := tree[currentNode]
+	if ok {
+		stack.Push(nodeList...)
+		for stack.Len() != 0 {
+			foundNode, err := FindNode(tree, stack, requiredNode)
+			if err == nil {
+				return foundNode, nil
+			}
+		}
+	}
+
+	return "", errors.New("Node not found")
 }
