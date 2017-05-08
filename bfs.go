@@ -14,9 +14,11 @@ type Queue struct {
 func (q *Queue) Push(nodes ...string) {
 	// check if we should drop the visited nodes
 	if q.Len()+len(nodes) > MaxQueueSize {
+		// drop queue if we have visited all the nodes in the queue
 		if q.index >= q.Len() {
 			q.nodeList = nil
 		} else {
+			// copy the to be visited nodes to new queue
 			q.nodeList = q.nodeList[q.index:]
 		}
 
