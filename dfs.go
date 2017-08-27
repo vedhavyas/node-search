@@ -38,7 +38,7 @@ func (s *Stack) Clear() {
 	s.nodeList = nil
 }
 
-// FindNode does a BFS on the
+// FindNode does a DFS on the
 func FindNode(tree Tree, stack *Stack, requiredNode string) (string, error) {
 
 	currentNode := stack.Pop()
